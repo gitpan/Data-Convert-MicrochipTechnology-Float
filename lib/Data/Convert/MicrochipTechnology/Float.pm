@@ -3,7 +3,7 @@ use strict;
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.02';
+    $VERSION     = '0.03';
 }
 
 =head1 NAME
@@ -87,6 +87,7 @@ sub float_from_string {
 
 sub float_from_array {
   my $self=shift();
+  #die unless 4 == scalar(@_);
   my ($b0, $b1, $b2, $b3)=@_;
   if (0==$b0 and (0==$b1 or 128==$b1) and 0==$b2 and 0==$b3) {
     #eliminates rounding errors for +/- zero
@@ -94,7 +95,6 @@ sub float_from_array {
   } else {
     my $s = $b1 & 128 ? -1 : 1;
     my $e = $b0 - 127;
-    #Should 2**23 be 2**23 - 1 ?
     my $m = 1 + ((($b1 & 127) * 256 + $b2) * 256 + $b3) / (2 ** 23);
     my $v = $s * 2 ** $e * $m;
     return $v;
